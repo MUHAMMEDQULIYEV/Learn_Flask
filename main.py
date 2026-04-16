@@ -1,4 +1,4 @@
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify,render_template
 
 
 app=Flask(__name__)
@@ -11,7 +11,7 @@ Driver={
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello New Flask App</p>"
+    return render_template("drivers.html",drivers=Driver)
 
 @app.route("/driver/<int:driver_id>")
 def get_driver(driver_id):
@@ -19,6 +19,30 @@ def get_driver(driver_id):
     if not driver:
         return jsonify({"error":"Driver  not found"}),404
     return jsonify(driver)
+@app.route("/drivers/add",methods=["POST"])
+def add_driver():
+    data=request.get_json()
+    number=data["number"]
+    name=data["name"]
+    team=data["team"]
+    Driver[number]={"name":name,
+                  
+                  "team":team}
+    return jsonify({"message":"driver message","driver":Driver[number]}),201
+    
+    
+@app.route("/drivers",methods=["GET"])
+def return_drivers():
+    return jsonify(Driver), 200
+    
+   
+
+
+
+    
+    
+    
+    
     
     
 @app.route("/predict",methods=['POST'])
